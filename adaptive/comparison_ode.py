@@ -40,7 +40,7 @@ def integrate_env(predictor, integrator, env, t0=None, x0=None, t1=None, plot=Fa
     if x0 is not None:
         env.x0 = x0
     if t1 is None:
-        if env.max_dist < np.infty:
+        if env.max_dist < np.inf:
             t1 = env.t0 + env.max_dist
         else:
             raise ValueError("Give value for t1!")

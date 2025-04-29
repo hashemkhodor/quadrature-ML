@@ -21,7 +21,7 @@ logger.add(
            "{message}",
     level="INFO"
 )
-logger.add("debug.log", format="{time} | {level} | {message}", level="DEBUG", rotation="10 MB")
+logger.add("logs/debug.log", format="{time} | {level} | {message}", level="DEBUG", rotation="10 MB")
 
 def choose_action(actions, eps, dim_action):
     fav = np.argmax(actions)
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         error_tol=cfg.tol,
         nodes_per_integ=cfg.rkdp.nodes_per_step,
         memory=cfg.rkdp.memory,
-        x0=cfg.x0,
+        x0=np.array(cfg.x0),
         t0=cfg.t0,
         max_dist=cfg.t1 - cfg.t0
     )

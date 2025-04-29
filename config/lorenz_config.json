@@ -5,6 +5,7 @@
   "d": 3,
   "step_sizes": [0.02, 0.022, 0.025, 0.029, 0.033, 0.039, 0.045, 0.052, 0.060, 0.070],
   "tol": 0.0001,
+  "eps_start": 0.5,
   "RKDP": {
     "nodes_per_step": 6,
     "memory": 0
@@ -15,5 +16,5 @@
   "batch_size": 64,
   "num_episodes":100,
   "gamma": 0,
-  "save_path": "predictorODE-expreward.weights.h5"
+  "save_path": "model_save/predictorODE-expreward.weights.h5"
 }

@@ -10,6 +10,7 @@ class QODEConfig(BaseModel):
     t0: float
     t1: float
     d: int
+    eps_start: float
     step_sizes: List[float]
     tol: float
     rkdp: RKDPConfig = Field(..., alias="RKDP")
