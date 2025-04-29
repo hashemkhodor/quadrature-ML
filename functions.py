@@ -581,7 +581,7 @@ class Rotation(FunctionODE):
 # class Pendulum(FunctionODE):
 #     """ A damped pendulum, which is bumped if the energy gets low  """
 #
-#     def __init__(self, switchpoints=(-np.infty, np.infty), delay=0.1):
+#     def __init__(self, switchpoints=(-np.inf, np.inf), delay=0.1):
 #         """
 #         Parameters
 #         ----------
@@ -707,7 +707,7 @@ class Rotation(FunctionODE):
 class Pendulum(FunctionODE):
     """ A damped pendulum, which is bumped if the energy gets low  """
 
-    def __init__(self, switchpoints=(-np.infty, np.infty)):
+    def __init__(self, switchpoints=(-np.inf, np.inf)):
         """
         Parameters
         ----------
@@ -822,7 +822,7 @@ class Pendulum(FunctionODE):
 class LorenzSystem(FunctionODE):
     """ Lorenz system"""
 
-    def __init__(self, switchpoints=(-np.infty, np.infty), chaotic=True, delay=0.1):
+    def __init__(self, switchpoints=(-np.inf, np.inf), chaotic=True, delay=0.1):
         """
         Parameters
         ----------
