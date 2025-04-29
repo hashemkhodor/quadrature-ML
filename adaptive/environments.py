@@ -21,7 +21,7 @@ class IntegrationEnv:
         nodes_per_integ,
         x0=0.0,
         step_size_range=(0.01, 1),
-        max_dist=np.infty,
+        max_dist=np.inf,
         memory=0,
         reward_fun=None,
     ):
@@ -272,7 +272,7 @@ class ODEEnv:
         x0,
         t0=0,
         step_size_range=(0.01, 10),
-        max_dist=np.infty,
+        max_dist=np.inf,
         nodes_per_integ=4,
         memory=0,
         reward_fun=None,
