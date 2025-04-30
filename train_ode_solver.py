@@ -1,3 +1,4 @@
+import json
 from argparse import ArgumentParser
 from loguru import logger
 from config.config import QODEConfig
@@ -23,6 +24,7 @@ logger.add(
 )
 logger.add("logs/debug.log", format="{time} | {level} | {message}", level="DEBUG", rotation="10 MB")
 
+
 def choose_action(actions, eps, dim_action):
     fav = np.argmax(actions)
     r = np.random.rand()
@@ -32,13 +34,14 @@ def choose_action(actions, eps, dim_action):
         return max(fav - 1, 0)
     return fav
 
+
 def train(predictor, env, experience, integrator, num_episodes: int, gamma: float, eps_start: float, step_sizes):
     logger.info(f"Starting training: episodes={num_episodes}, gamma={gamma}, eps_start={eps_start}")
     for episode in range(num_episodes):
         state = env.reset(integrator=integrator)
         done = False
         eps = eps_start
-        logger.info(f"→ Episode {episode+1}/{num_episodes} begins")
+        logger.info(f"→ Episode {episode + 1}/{num_episodes} begins")
 
         while not done:
             actions = predictor.get_actions(state)
@@ -64,19 +67,8 @@ def train(predictor, env, experience, integrator, num_episodes: int, gamma: floa
 
     logger.info("Training complete")
 
-if __name__ == "__main__":
-    parser = ArgumentParser(description="Run QODE with a JSON config")
-    parser.add_argument(
-        "-c", "--config",
-        type=str,
-        required=True,
-        help="Path to your JSON config file"
-    )
-    args = parser.parse_args()
 
-    logger.info(f"Loading config from {args.config}")
-    cfg = QODEConfig.parse_file(args.config)
-
+def start_training(cfg: QODEConfig):
     # Build components
     logger.info("Initializing integrator and predictor")
     integrator = RKDP()
@@ -135,3 +127,22 @@ if __name__ == "__main__":
     logger.info(f"Saving weights to {cfg.save_path}")
     predictor.model.save_weights(cfg.save_path)
     logger.success("All done!")
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser(description="Run QODE with a JSON config")
+    parser.add_argument(
+        "-c", "--config",
+        type=str,
+        required=True,
+        help="Path to your JSON config file"
+    )
+    args = parser.parse_args()
+
+    logger.info(f"Loading config from {args.config}")
+    with open(args.config, 'r') as f:
+        cfgs = [QODEConfig.model_validate(cfg) for cfg in json.loads(f.read())]
+
+    for cfg in cfgs:
+        logger.info(f"Training on {cfg.save_path}")
+        start_training(cfg)
