@@ -41,10 +41,13 @@ def load_environment(cfg: QODEConfig):
     )
 
 
-
 def evaluate(cfg_path: str, models_cfg_path: str, save_results_path: str | None = None):
-    logger.info("Loading config & model list …")
-    cfg = QODEConfig.parse_file(cfg_path)
+    logger.info("Loading config & model list ...")
+    print(cfg_path)
+    with open(cfg_path, 'r') as f:
+        config = json.loads(f.read())[0]
+
+    cfg = QODEConfig.model_validate(config)
     with open(models_cfg_path) as fp:
         models_dict: dict[str, str] = json.load(fp)
 
@@ -84,7 +87,6 @@ def evaluate(cfg_path: str, models_cfg_path: str, save_results_path: str | None 
         logger.info(f"Writing metrics → {save_results_path}")
         with open(save_results_path, "w") as fp:
             json.dump(results, fp, indent=4)
-
 
     plt.style.use("ggplot")
     metrics = [
