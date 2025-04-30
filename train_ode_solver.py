@@ -3,7 +3,12 @@ from argparse import ArgumentParser
 from loguru import logger
 from config.config import QODEConfig
 from adaptive.integrator import RKDP
-from adaptive.reward_functions import RewardLog10, RewardExp
+from adaptive.reward_functions import (
+    RewardLog10, RewardExp,
+    RewardLinear, RewardSigmoid, RewardInverse,
+    RewardQuadratic, RewardAsymmetricExp
+)
+
 from sklearn.preprocessing import StandardScaler
 from joblib import load
 from adaptive.predictor import PredictorQODE
@@ -86,14 +91,22 @@ def start_training(cfg: QODEConfig):
     logger.info("Configuring reward function and environment")
     reward_range = tuple(cfg.reward_range)
     step_range = (cfg.step_sizes[0], cfg.step_sizes[-1])
-    if cfg.reward_fn == "log":
-        reward_fun = RewardLog10(error_tol=cfg.tol,
-                                 step_size_range=step_range,
-                                 reward_range=reward_range)
-    else:
-        reward_fun = RewardExp(error_tol=cfg.tol,
-                               step_size_range=step_range,
-                               reward_range=reward_range)
+
+    step_mid = (step_range[0] + step_range[1]) * 0.5
+    factory = {
+        "log": lambda: RewardLog10(cfg.tol, step_range, reward_range),
+        "exp": lambda: RewardExp(cfg.tol, step_range, reward_range),
+        "linear": lambda: RewardLinear(cfg.tol, step_range, reward_range),
+        "sigmoid": lambda: RewardSigmoid(cfg.tol, step_mid),
+        "inverse": lambda: RewardInverse(cfg.tol, step_mid),
+        "quadratic": lambda: RewardQuadratic(cfg.tol, step_mid),
+        "asym_exp": lambda: RewardAsymmetricExp(cfg.tol, step_range)
+    }
+
+    if cfg.reward_fn not in factory:
+        raise ValueError(f"Unknown reward_fn '{cfg.reward_fn}'")
+
+    reward_fun = factory[cfg.reward_fn]()
 
     env = ODEEnv(
         fun=LorenzSystem(),
