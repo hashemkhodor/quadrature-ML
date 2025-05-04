@@ -1,0 +1,122 @@
+{
+  "rkdp": [
+    {
+      "reward_fn": "log",
+      "save_path": "model_save/rkdp/predictorODE-log.weights.h5"
+    },
+    {
+      "reward_fn": "exp",
+      "save_path": "model_save/rkdp/predictorODE-exp.weights.h5"
+    },
+    {
+      "reward_fn": "linear",
+      "save_path": "model_save/rkdp/predictorODE-linear.weights.h5"
+    },
+    {
+      "reward_fn": "sigmoid",
+      "save_path": "model_save/rkdp/predictorODE-sigmoid.weights.h5"
+    },
+    {
+      "reward_fn": "inverse",
+      "save_path": "model_save/rkdp/predictorODE-inverse.weights.h5"
+    },
+    {
+      "reward_fn": "quadratic",
+      "save_path": "model_save/rkdp/predictorODE-quadratic.weights.h5"
+    },
+    {
+      "reward_fn": "asym_exp",
+      "save_path": "model_save/rkdp/predictorODE-asymexp.weights.h5"
+    }
+  ],
+  "cash_karp": [
+    {
+      "reward_fn": "log",
+      "save_path": "model_save/cash_karp/predictorODE-log.weights.h5"
+    },
+    {
+      "reward_fn": "exp",
+      "save_path": "model_save/cash_karp/predictorODE-exp.weights.h5"
+    },
+    {
+      "reward_fn": "linear",
+      "save_path": "model_save/cash_karp/predictorODE-linear.weights.h5"
+    },
+    {
+      "reward_fn": "sigmoid",
+      "save_path": "model_save/cash_karp/predictorODE-sigmoid.weights.h5"
+    },
+    {
+      "reward_fn": "inverse",
+      "save_path": "model_save/cash_karp/predictorODE-inverse.weights.h5"
+    },
+    {
+      "reward_fn": "quadratic",
+      "save_path": "model_save/cash_karp/predictorODE-quadratic.weights.h5"
+    },
+    {
+      "reward_fn": "asym_exp",
+      "save_path": "model_save/cash_karp/predictorODE-asymexp.weights.h5"
+    }
+  ],
+  "fehlberg78": [
+    {
+      "reward_fn": "log",
+      "save_path": "model_save/fehlberg78/predictorODE-log.weights.h5"
+    },
+    {
+      "reward_fn": "exp",
+      "save_path": "model_save/fehlberg78/predictorODE-exp.weights.h5"
+    },
+    {
+      "reward_fn": "linear",
+      "save_path": "model_save/fehlberg78/predictorODE-linear.weights.h5"
+    },
+    {
+      "reward_fn": "sigmoid",
+      "save_path": "model_save/fehlberg78/predictorODE-sigmoid.weights.h5"
+    },
+    {
+      "reward_fn": "inverse",
+      "save_path": "model_save/fehlberg78/predictorODE-inverse.weights.h5"
+    },
+    {
+      "reward_fn": "quadratic",
+      "save_path": "model_save/fehlberg78/predictorODE-quadratic.weights.h5"
+    },
+    {
+      "reward_fn": "asym_exp",
+      "save_path": "model_save/fehlberg78/predictorODE-asymexp.weights.h5"
+    }
+  ],
+  "gauss_legendre_2": [
+    {
+      "reward_fn": "log",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-log.weights.h5"
+    },
+    {
+      "reward_fn": "exp",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-exp.weights.h5"
+    },
+    {
+      "reward_fn": "linear",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-linear.weights.h5"
+    },
+    {
+      "reward_fn": "sigmoid",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-sigmoid.weights.h5"
+    },
+    {
+      "reward_fn": "inverse",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-inverse.weights.h5"
+    },
+    {
+      "reward_fn": "quadratic",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-quadratic.weights.h5"
+    },
+    {
+      "reward_fn": "asym_exp",
+      "save_path": "model_save/gauss_legendre_2/predictorODE-asymexp.weights.h5"
+    }
+  ]
+}

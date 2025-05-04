@@ -1,3 +1,4 @@
+import os.path
 from argparse import ArgumentParser
 from loguru import logger
 from config.config import QODEConfig
@@ -69,10 +70,10 @@ def evaluate(cfg_path: str, models_cfg_path: str, save_results_path: str | None 
 
     for name, weights in models_dict.items():
         logger.info(f"Evaluating {name}")
+        time_steps: list = []
         predictor.model.load_weights(weights)
         env.reset(integrator=integrator)
-        reward, nfev = integrate_env(predictor, integrator, env, t0=t0, t1=t1)
-
+        reward, nfev = integrate_env(predictor, integrator, env, t0=t0, t1=t1,time_steps=time_steps)
         results[name] = {
             "reward": reward,
             "nfev": nfev,
@@ -81,10 +82,14 @@ def evaluate(cfg_path: str, models_cfg_path: str, save_results_path: str | None 
             "max_error": np.max(env.errors),
             "min_stepsize": np.min(env.deltas),
             "max_stepsize": np.max(env.deltas),
+            "time_steps": time_steps.copy()
         }
 
     if save_results_path:
         logger.info(f"Writing metrics → {save_results_path}")
+        if os.path.dirname(save_results_path):
+            os.makedirs(os.path.dirname(save_results_path), exist_ok=True)
+
         with open(save_results_path, "w") as fp:
             json.dump(results, fp, indent=4)
 
@@ -171,10 +176,11 @@ def evaluate(cfg_path: str, models_cfg_path: str, save_results_path: str | None 
 
 
 if __name__ == "__main__":
-    p = ArgumentParser(description="Evaluate multiple QODE models and plot results nicely.")
-    p.add_argument("-c", "--config", required=True, help="Path to QODE config JSON")
-    p.add_argument("-m", "--models", required=True, help="Path to models JSON (name:path)")
-    p.add_argument("-s", "--save", help="Optional path to save metrics JSON")
-    args = p.parse_args()
+    # p = ArgumentParser(description="Evaluate multiple QODE models and plot results nicely.")
+    # p.add_argument("-c", "--config", required=True, help="Path to QODE config JSON")
+    # p.add_argument("-m", "--models", required=True, help="Path to models JSON (name:path)")
+    # p.add_argument("-s", "--save", help="Optional path to save metrics JSON")
+    # args = p.parse_args()
 
-    evaluate(args.config, args.models, args.save)
+    # evaluate(args.config, args.models, args.save)
+    evaluate(cfg_path="config/lorenz_config.json", models_cfg_path="config/eval/models_path.json", save_results_path="results/cashkarp45/eval_results.json")

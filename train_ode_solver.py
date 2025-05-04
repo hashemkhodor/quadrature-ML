@@ -1,8 +1,9 @@
 import json
+import os.path
 from argparse import ArgumentParser
 from loguru import logger
 from config.config import QODEConfig
-from adaptive.integrator import RKDP
+from adaptive.integrator import RKDP, CashKarp45, Fehlberg78, GaussLegendre2Stage
 from adaptive.reward_functions import (
     RewardLog10, RewardExp,
     RewardLinear, RewardSigmoid, RewardInverse,
@@ -18,7 +19,6 @@ from functions import LorenzSystem
 from adaptive.experience import ExperienceODE
 import numpy as np
 
-# Configure Loguru
 logger.remove()  # remove default handler
 logger.add(
     sink=lambda msg: print(msg, end=""),  # stdout
@@ -76,7 +76,14 @@ def train(predictor, env, experience, integrator, num_episodes: int, gamma: floa
 def start_training(cfg: QODEConfig):
     # Build components
     logger.info("Initializing integrator and predictor")
-    integrator = RKDP()
+    factory_integrator: dict = {
+        "rkdp": RKDP,
+        "cash_karp": CashKarp45,
+        "fehlberg78": Fehlberg78,
+        "gauss_legendre_2": GaussLegendre2Stage
+    }
+    # integrator = RKDP()
+    integrator = CashKarp45()
     scaler = load(cfg.scaler_path)
     predictor = PredictorQODE(
         step_sizes=cfg.step_sizes,
@@ -138,7 +145,9 @@ def start_training(cfg: QODEConfig):
     )
 
     logger.info(f"Saving weights to {cfg.save_path}")
-    predictor.model.save_weights(cfg.save_path)
+    if os.path.dirname(cfg.save_path):
+        os.makedirs(os.path.dirname(cfg.save_path), exist_ok=True)
+        predictor.model.save_weights(cfg.save_path)
     logger.success("All done!")
 
 
@@ -154,8 +163,21 @@ if __name__ == "__main__":
 
     logger.info(f"Loading config from {args.config}")
     with open(args.config, 'r') as f:
-        cfgs = [QODEConfig.model_validate(cfg) for cfg in json.loads(f.read())]
+        config = json.loads(f.read())
+        logger.info(f"Loaded config from {args.config}")
+        if isinstance(config, list):
+            cfgs: list[QODEConfig] = [QODEConfig.model_validate(cfg) for cfg in config]
+        elif isinstance(config,dict):
+            cfgs: dict[str, list[QODEConfig]] = {}
+            for k, v in config.items():
+                cfgs[k] = [QODEConfig.model_validate(cfg) for cfg in v]
 
     for cfg in cfgs:
-        logger.info(f"Training on {cfg.save_path}")
-        start_training(cfg)
+        if isinstance(cfg, str):
+            for _cfg in cfgs[cfg]:
+                logger.info(f"Training on {_cfg.save_path}")
+                start_training(_cfg)
+
+        else:
+            logger.info(f"Training on {cfg.save_path}")
+            start_training(cfg)

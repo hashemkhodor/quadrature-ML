@@ -14,7 +14,7 @@ from adaptive.plots import plot_pareto, plot_trajectory
 from adaptive.train_metalearner import stepsize_to_idx
 
 
-def integrate_env(predictor, integrator, env, t0=None, x0=None, t1=None, plot=False):
+def integrate_env(predictor, integrator, env, t0=None, x0=None, t1=None, plot=False, time_steps=None):
     """
     Integrates the environment from t0 to t1 using the specified predictor and integrator.
 
@@ -49,12 +49,17 @@ def integrate_env(predictor, integrator, env, t0=None, x0=None, t1=None, plot=Fa
     reward = 0
     # energy = []
     # initial_energy = DoublePendulum().calc_E(env.x0)
+
     while True:
         # energy.append(env.fun.calc_E(env.nodes[-1]))
         # energy = DoublePendulum().calc_E(env.nodes[-1])
         # if energy / initial_energy > 1.3:
         #     break
+
         step_size = predictor(state)
+        if time_steps is not None:
+            time_steps.append(step_size)
+
         next_state, r, _, info = env.iterate(step_size, integrator)
         reward += r
         state = next_state.copy()

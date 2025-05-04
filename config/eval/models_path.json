@@ -1,0 +1,9 @@
+{
+  "log_reward"      : "model_save/fehlberg78/predictorODE-log.weights.h5",
+  "exp_reward"      : "model_save/fehlberg78/predictorODE-exp.weights.h5",
+  "linear_reward"   : "model_save/cashkarp45/predictorODE-linear.weights.h5",
+  "sigmoid_reward"  : "model_save/cashkarp45/predictorODE-sigmoid.weights.h5",
+  "inverse_reward"  : "model_save/cashkarp45/predictorODE-inverse.weights.h5",
+  "quadratic_reward": "model_save/cashkarp45/predictorODE-quadratic.weights.h5",
+  "asym_exp_reward" : "model_save/cashkarp45/predictorODE-asymexp.weights.h5"
+}
