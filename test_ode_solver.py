@@ -205,4 +205,18 @@ def evaluate(cfg_path: str, save_path: str = "results/eval_all.json") -> None:
 
 
 if __name__ == "__main__":
-    evaluate(cfg_path="config/train/lorenz_config.json")
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Evaluate QODE configurations.")
+    parser.add_argument(
+        "--cfg_path", type=str, required=True,
+        help="Path to the configuration JSON file."
+    )
+    parser.add_argument(
+        "--save_path", type=str, default="results/eval_all.json",
+        help="Path to save evaluation results (default: results/eval_all.json)."
+    )
+    args = parser.parse_args()
+
+    evaluate(cfg_path=args.cfg_path, save_path=args.save_path)
+    # evaluate(cfg_path="config/train/lorenz_config.json")

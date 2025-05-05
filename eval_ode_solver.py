@@ -189,4 +189,4 @@ if __name__ == "__main__":
     # args = p.parse_args()
 
     # evaluate(args.config, args.models, args.save)
-    evaluate(cfg_path="config/lorenz_config.json", models_cfg_path="config/eval/models_path.json", save_results_path="results/cashkarp45/eval_results.json")
+    evaluate(cfg_path="config/config_template.json", models_cfg_path="config/eval/models_path.json", save_results_path="results/cashkarp45/eval_results.json")

@@ -1,8 +1,0 @@
-{
-  "rkdp": [
-    {
-      "reward_fn": "log",
-      "save_path": "model_save/mixed/rkdp/predictorODE-log.weights.h5"
-    }
-  ]
-}

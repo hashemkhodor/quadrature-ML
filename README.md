@@ -1,14 +1,149 @@
-# Efficient time stepping for numerical integration using reinforcement learning
+# Adaptive Time Step Integrators
 
-We learn step-size controllers for (1) adaptive quadrature rules and (2) adaptive integration schemes for ODEs.
-Please refer to the Jupyter notebook files "quadrature.ipynb" and "time_stepper_ODE.ipynb".
+A machine learning-based framework for training and testing adaptive time step integrators for solving ordinary differential equations (ODEs), using methods like Runge–Kutta–Dormand–Prince (RKDP), Cash–Karp, Fehlberg78, and Gauss–Legendre.
 
-These files accompany the article:
+This project uses reinforcement learning (RL) to learn optimal step size selection dynamically during integration, balancing accuracy and computational efficiency.
 
-    Efficient time stepping for numerical integration using reinforcement learning
-    Michael Dellnitz, Eyke Hüllermeier, Marvin Lücke, Sina Ober-Blöbaum, Christian Offen, Sebastian Peitz, Karlson Pfannschmidt
-    SIAM Journal on Scientific Computing, Volume 45 (2), 2023, pages A579-A595, DOI: 10.1137/21M1412682
-    
-DOI: <a href="https://doi.org/10.1137/21M1412682">10.1137/21M1412682</a>
-Preprint: <a href="https://arxiv.org/abs/2104.03562">arXiv:2104.03562</a>
-  
+---
+
+## 📄 Paper
+
+This implementation builds upon ideas and base code presented in the paper:
+
+> **"Efficient time stepping for numerical integration using reinforcement learning"**  
+> [arXiv:2104.03562](https://arxiv.org/abs/2104.03562)
+---
+
+## 🧠 Project Highlights
+
+* RL-based adaptive integration for ODE solvers.
+* Plug-and-play support for multiple classic numerical integration methods.
+* Modular and configurable design using JSON-based configuration files.
+* Supports multiple reward strategies to tune learning behavior.
+
+---
+
+## 📚 Table of Contents
+
+* [Installation](#installation)
+* [Usage](#usage)
+
+  * [Training](#training)
+  * [Testing](#testing)
+* [Configuration](#configuration)
+* [Features](#features)
+* [Reward Functions](#reward-functions)
+* [Dependencies](#dependencies)
+* [Examples](#examples)
+* [Troubleshooting](#troubleshooting)
+* [Contributors](#contributors)
+* [License](#license)
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/hashemkhodor/quadrature-ML.git
+cd quadrature-ML
+pip install -r requirements.txt
+```
+
+Python 3.8+ is required.
+
+---
+
+## 🚀 Usage
+
+### ✅ Training
+
+```bash
+py -m train_ode_solver --config ".\config\train\lorenz_config.json"
+```
+
+### 🧪 Testing
+
+```bash
+python -m test_ode_solver --cfg_path config/train/lorenz_config.json --save_path results/custom_eval.json
+```
+
+---
+
+## ⚙️ Configuration
+
+All configuration files must follow the structure in `config/config_template.json`. Each block corresponds to a specific ODE integrator (e.g., `"rkdp"` or `"cash_karp"`).
+
+### Key Parameters
+
+| Parameter      | Description                                                              |
+| -------------- | ------------------------------------------------------------------------ |
+| `x0`           | Initial conditions for the Lorenz system (list of floats)                |
+| `t0`           | Start time of integration (float)                                        |
+| `t1`           | End time of integration (float)                                          |
+| `d`            | Dimensionality of the system (usually 3 for Lorenz)                      |
+| `step_sizes`   | Finite set of candidate time steps to pick from during RL                |
+| `tol`          | Tolerance level for error at each step (how much deviation is tolerated) |
+| `eps_start`    | Initial exploration rate for RL                                          |
+| `reward_fn`    | Name of reward function used during training (see below)                 |
+| `batch_size`   | Number of samples per training batch                                     |
+| `num_episodes` | Number of training episodes                                              |
+| `gamma`        | Discount factor in RL                                                    |
+| `scaler_path`  | Path to input scaler (used for normalization)                            |
+| `save_path`    | Where to save the trained model weights                                  |
+
+---
+
+## ✨ Features
+
+* **Adaptive RL Control**: Uses reinforcement learning to choose optimal time steps.
+* **Integrator Agnostic**: Switch between RKDP and Cash–Karp.
+* **Extensible Rewards**: Easily plug in different reward logic.
+* **Structured Configs**: Modular and reproducible experimentation setup.
+
+---
+
+## 🏆 Reward Functions
+
+Reward functions influence how the RL agent values step size decisions.
+
+### Supported Reward Functions
+
+| Function Name | Description                                                            |
+| ------------- | ---------------------------------------------------------------------- |
+| `log`         | Logarithmic reward scaling (penalizes large errors logarithmically)    |
+| `exp`         | Exponential reward based on error                                      |
+| `linear`      | Linearly maps the step reward based on accuracy and step size          |
+| `sigmoid`     | S-shaped response to step decisions (smoothed transitions)             |
+| `inverse`     | Inverse relationship between error and reward                          |
+| `quadratic`   | Penalizes large deviations more harshly (squared error emphasis)       |
+| `asym_exp`    | Asymmetric exponential for better sensitivity to under- vs. over-steps |
+
+Set your desired reward using the `"reward_fn"` key in your configuration file.
+
+---
+
+## 📦 Dependencies
+
+Install required packages via:
+
+```bash
+pip install -r requirements.txt
+```
+---
+
+## 📈 Examples
+
+Train using RKDP integrator on the Lorenz system:
+
+```bash
+py -m train_ode_solver --config ".\config\train\lorenz_config.json"
+```
+
+Test your model:
+
+```bash
+python -m test_ode_solver --cfg_path config/train/lorenz_config.json --save_path results/custom_eval.json
+```
+
+
+---
