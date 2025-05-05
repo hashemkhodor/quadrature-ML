@@ -151,7 +151,7 @@ python -m test_ode_solver --cfg_path config/train/lorenz_config.json --save_path
 
 ## 📓 Notebook: LSTM Lorenz Forecaster
 
-The notebook [`LSTM_lorenz.ipynb`](./lstm_lorenz.ipynb) demonstrates how to use the precomputed adaptive time steps (from trained RL agents) to train and evaluate a deep learning model (model A) on the Lorenz system.
+The notebook [`LSTM_lorenz.ipynb`](./LSTM_lorenz.ipynb) demonstrates how to use the precomputed adaptive time steps (from trained RL agents) to train and evaluate a deep learning model (model A) on the Lorenz system.
 
 This model is based on an LSTM architecture and is designed to predict the next state \([x_{i+1}, y_{i+1}, z_{i+1}]\) from the current state and time step \([x_i, y_i, z_i, \Delta t_i]\).
 
