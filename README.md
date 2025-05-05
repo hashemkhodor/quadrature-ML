@@ -35,6 +35,7 @@ This implementation builds upon ideas and base code presented in the paper:
 * [Reward Functions](#reward-functions)
 * [Dependencies](#dependencies)
 * [Examples](#examples)
+* [Notebook: LSTM Lorenz Forecaster](#notebook-lstm-lorenz-forecaster)
 * [Troubleshooting](#troubleshooting)
 * [Contributors](#contributors)
 * [License](#license)
@@ -147,3 +148,25 @@ python -m test_ode_solver --cfg_path config/train/lorenz_config.json --save_path
 
 
 ---
+
+## 📓 Notebook: LSTM Lorenz Forecaster
+
+The notebook [`LSTM_lorenz.ipynb`](./notebooks/lstm_lorenz.ipynb) demonstrates how to use the precomputed adaptive time steps (from trained RL agents) to train and evaluate a deep learning model (model A) on the Lorenz system.
+
+This model is based on an LSTM architecture and is designed to predict the next state \([x_{i+1}, y_{i+1}, z_{i+1}]\) from the current state and time step \([x_i, y_i, z_i, \Delta t_i]\).
+
+### 🔍 What it Shows
+
+- How to use adaptive RL-generated time steps with neural forecasting models
+- How delta t is embedded into the model input for temporal awareness
+- Comparison of adaptive vs. fixed-step prediction quality
+- Training pipeline, evaluation plots, and visualized Lorenz trajectories
+
+### 🛠️ Modify Easily
+
+You can change:
+- The integrator or reward shaping strategy by modifying which `dt_values` array you load
+- The initial conditions and sequence length
+- The model architecture (swap out LSTM for GRU, Transformer, etc.)
+
+This notebook serves as a complete, standalone tutorial for forecasting chaotic systems using machine learning with RL-driven temporal discretization.
