@@ -62,7 +62,9 @@
   "fehlberg78": [
     {
       "reward_fn": "log",
-      "save_path": "model_save/fehlberg78/predictorODE-log.weights.h5"
+      "save_path": "model_save/fehlberg78/predictorODE-log.weights.h5",
+      { "nodes_per_step": 13, "memory": 0 },
+      "d": 8
     },
     {
       "reward_fn": "exp",

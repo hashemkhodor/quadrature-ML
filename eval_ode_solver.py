@@ -2,7 +2,7 @@ import os.path
 from argparse import ArgumentParser
 from loguru import logger
 from config.config import QODEConfig
-from adaptive.integrator import RKDP
+from adaptive.integrator import RKDP, CashKarp45, Fehlberg78, GaussLegendre2Stage
 from adaptive.predictor import PredictorQODE
 from adaptive.build_models import build_value_modelODE
 from adaptive.reward_functions import RewardLog10, RewardExp
@@ -52,6 +52,12 @@ def evaluate(cfg_path: str, models_cfg_path: str, save_results_path: str | None 
     with open(models_cfg_path) as fp:
         models_dict: dict[str, str] = json.load(fp)
 
+    factory_integrator: dict = {
+        "rkdp": RKDP,
+        "cash_karp": CashKarp45,
+        "fehlberg78": Fehlberg78,
+        "gauss_legendre_2": GaussLegendre2Stage
+    }
     integrator = RKDP()
     scaler = load(cfg.scaler_path)
     predictor = PredictorQODE(

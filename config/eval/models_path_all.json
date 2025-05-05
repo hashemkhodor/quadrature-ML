@@ -1,0 +1,38 @@
+{
+  "fehlberg78": {
+    "log_reward": "model_save/fehlberg78/predictorODE-log.weights.h5",
+    "exp_reward": "model_save/fehlberg78/predictorODE-exp.weights.h5",
+    "linear_reward": "model_save/fehlberg78/predictorODE-linear.weights.h5",
+    "sigmoid_reward": "model_save/fehlberg78/predictorODE-sigmoid.weights.h5",
+    "inverse_reward": "model_save/fehlberg78/predictorODE-inverse.weights.h5",
+    "quadratic_reward": "model_save/fehlberg78/predictorODE-quadratic.weights.h5",
+    "asym_exp_reward": "model_save/fehlberg78/predictorODE-asymexp.weights.h5"
+  },
+  "cashkarp45": {
+    "log_reward": "model_save/cashkarp45/predictorODE-log.weights.h5",
+    "exp_reward": "model_save/cashkarp45/predictorODE-exp.weights.h5",
+    "linear_reward": "model_save/cashkarp45/predictorODE-linear.weights.h5",
+    "sigmoid_reward": "model_save/cashkarp45/predictorODE-sigmoid.weights.h5",
+    "inverse_reward": "model_save/cashkarp45/predictorODE-inverse.weights.h5",
+    "quadratic_reward": "model_save/cashkarp45/predictorODE-quadratic.weights.h5",
+    "asym_exp_reward": "model_save/cashkarp45/predictorODE-asymexp.weights.h5"
+  },
+    "gauss_legendre_2": {
+    "log_reward": "model_save/gauss_legendre_2/predictorODE-log.weights.h5",
+    "exp_reward": "model_save/gauss_legendre_2/predictorODE-exp.weights.h5",
+    "linear_reward": "model_save/gauss_legendre_2/predictorODE-linear.weights.h5",
+    "sigmoid_reward": "model_save/gauss_legendre_2/predictorODE-sigmoid.weights.h5",
+    "inverse_reward": "model_save/gauss_legendre_2/predictorODE-inverse.weights.h5",
+    "quadratic_reward": "model_save/gauss_legendre_2/predictorODE-quadratic.weights.h5",
+    "asym_exp_reward": "model_save/gauss_legendre_2/predictorODE-asymexp.weights.h5"
+  },
+  "rkdp": {
+    "log_reward": "model_save/rkdp/predictorODE-log.weights.h5",
+    "exp_reward": "model_save/rkdp/predictorODE-exp.weights.h5",
+    "linear_reward": "model_save/rkdp/predictorODE-linear.weights.h5",
+    "sigmoid_reward": "model_save/rkdp/predictorODE-sigmoid.weights.h5",
+    "inverse_reward": "model_save/rkdp/predictorODE-inverse.weights.h5",
+    "quadratic_reward": "model_save/rkdp/predictorODE-quadratic.weights.h5",
+    "asym_exp_reward": "model_save/rkdp/predictorODE-asymexp.weights.h5"
+  }
+}

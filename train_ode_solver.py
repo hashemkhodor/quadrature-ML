@@ -2,7 +2,7 @@ import json
 import os.path
 from argparse import ArgumentParser
 from loguru import logger
-from config.config import QODEConfig
+from config.config import QODEConfig, load_config
 from adaptive.integrator import RKDP, CashKarp45, Fehlberg78, GaussLegendre2Stage
 from adaptive.reward_functions import (
     RewardLog10, RewardExp,
@@ -82,7 +82,7 @@ def start_training(cfg: QODEConfig):
         "fehlberg78": Fehlberg78,
         "gauss_legendre_2": GaussLegendre2Stage
     }
-    # integrator = RKDP()
+
     integrator = factory_integrator[cfg.integrator]()
     scaler = load(cfg.scaler_path)
     predictor = PredictorQODE(
@@ -101,19 +101,19 @@ def start_training(cfg: QODEConfig):
 
     step_mid = (step_range[0] + step_range[1]) * 0.5
     factory = {
-        "log": lambda: RewardLog10(cfg.tol, step_range, reward_range),
-        "exp": lambda: RewardExp(cfg.tol, step_range, reward_range),
-        "linear": lambda: RewardLinear(cfg.tol, step_range, reward_range),
-        "sigmoid": lambda: RewardSigmoid(cfg.tol, step_mid),
-        "inverse": lambda: RewardInverse(cfg.tol, step_mid),
-        "quadratic": lambda: RewardQuadratic(cfg.tol, step_mid),
-        "asym_exp": lambda: RewardAsymmetricExp(cfg.tol, step_range)
+        "log": RewardLog10(cfg.tol, step_range, reward_range),
+        "exp": RewardExp(cfg.tol, step_range, reward_range),
+        "linear": RewardLinear(cfg.tol, step_range, reward_range),
+        "sigmoid": RewardSigmoid(cfg.tol, step_mid),
+        "inverse": RewardInverse(cfg.tol, step_mid),
+        "quadratic": RewardQuadratic(cfg.tol, step_mid),
+        "asym_exp": RewardAsymmetricExp(cfg.tol, step_range)
     }
 
     if cfg.reward_fn not in factory:
         raise ValueError(f"Unknown reward_fn '{cfg.reward_fn}'")
 
-    reward_fun = factory[cfg.reward_fn]()
+    reward_fun = factory[cfg.reward_fn]
 
     env = ODEEnv(
         fun=LorenzSystem(),
@@ -162,22 +162,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     logger.info(f"Loading config from {args.config}")
-    with open(args.config, 'r') as f:
-        config = json.loads(f.read())
-        logger.info(f"Loaded config from {args.config}")
-        if isinstance(config, list):
-            cfgs: list[QODEConfig] = [QODEConfig.model_validate(cfg) for cfg in config]
-        elif isinstance(config,dict):
-            cfgs: dict[str, list[QODEConfig]] = {}
-            for k, v in config.items():
-                cfgs[k] = [QODEConfig.model_validate(cfg) for cfg in v]
+    cfgs = load_config(args.config)
 
     for cfg in cfgs:
-        if isinstance(cfg, str):
-            for _cfg in cfgs[cfg]:
-                logger.info(f"Training on {_cfg.save_path}")
-                start_training(_cfg)
+        for _cfg in cfgs[cfg]:
+            logger.info(f"Training on {_cfg.save_path}. Model {_cfg.integrator}/{_cfg.reward_fn}")
 
-        else:
-            logger.info(f"Training on {cfg.save_path}")
-            start_training(cfg)
+            start_training(_cfg)
