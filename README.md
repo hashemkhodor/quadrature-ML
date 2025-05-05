@@ -13,7 +13,18 @@ This implementation builds upon ideas and base code presented in the paper:
 > **"Efficient time stepping for numerical integration using reinforcement learning"**  
 > [arXiv:2104.03562](https://arxiv.org/abs/2104.03562)
 ---
+## References:
+https://arxiv.org/abs/2501.08934
 
+https://doi.org/10.1137/21M1412682
+
+https://doi.org/10.3390/sym14050955
+
+https://doi.org/10.52783/jes.1478
+
+https://arxiv.org/abs/1110.5728
+
+---
 ## 🧠 Project Highlights
 
 * RL-based adaptive integration for ODE solvers.
