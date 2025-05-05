@@ -1371,20 +1371,78 @@ def test_Rotation():
     plt.show()
 
 
-if __name__ == '__main__':
-    # test_Lorenz()
-    test_pendulum()
-    # test_Rotation()
+class NeuralLorenzSystem(FunctionODE):
+    """
+    Neural network-based Lorenz system approximation.
+    Approximates f(t, x) = dx/dt using a trained neural network.
+    """
 
-    # """ Small skript to visualize a function class and check if integrals are computed correctly """
-    # f = BrokenPolynomial()
-    # x = np.linspace(-1, 1, 1000)
-    #
-    # for i in range(10):
-    #     f.reset()
-    #     plt.plot(x, [f(num) for num in x])
-    #     print(f.integral(-1, 1))
-    #     print(quad(f, -1, 1)[0])
-    #     print()
-    #
-    # plt.show()
+    def __init__(self, model, data_path: str = "forecaster/data/processed_data_dt.npz", dt: float = 0.001):
+        """
+        Parameters
+        ----------
+        model : tf.keras.Model or compatible
+            A neural network that takes x = [x, y, z] and returns dx/dt = [dx, dy, dz]
+        """
+        super().__init__()
+        self.model = model
+        self.data_path: str = data_path
+        self.dt: float = dt
+        self.evals = 0
+
+        data = np.load(self.data_path)
+
+        _, y_train = data["X_train"], data["y_train"]
+        _, y_test = data["X_test"], data["y_test"]
+
+        # Concatenate along the first axis (samples)
+        y_all = np.concatenate((y_train, y_test), axis=0)
+
+        self.data = y_all
+
+    def reset(self,*args,**kwargs):
+        self.evals = 0
+
+    def __call__(self, t, x):
+        """
+        Predict the derivative at time t using the neural network.
+
+        Parameters
+        ----------
+        t : float
+        x : np.ndarray
+            shape (3,), the current state [x, y, z]
+
+        Returns
+        -------
+        np.ndarray
+            predicted derivative dx/dt = [dx, dy, dz]
+        """
+        self.evals += 1
+
+        # Ensure input is 2D for the model: shape (1, 3)
+        x_input = np.array(x, dtype=np.float32).reshape(1, -1)
+        dx = self.model.predict(x_input, verbose=0)  # shape (1, 3)
+        return dx[0]  # return shape (3,)
+
+    def solve(self, t_0, x_0, t_1, t_eval=None):
+        return self.data[int(t_1 * 1000)]
+
+
+# if __name__ == '__main__':
+#     # test_Lorenz()
+#     test_pendulum()
+# test_Rotation()
+
+# """ Small skript to visualize a function class and check if integrals are computed correctly """
+# f = BrokenPolynomial()
+# x = np.linspace(-1, 1, 1000)
+#
+# for i in range(10):
+#     f.reset()
+#     plt.plot(x, [f(num) for num in x])
+#     print(f.integral(-1, 1))
+#     print(quad(f, -1, 1)[0])
+#     print()
+#
+# plt.show()

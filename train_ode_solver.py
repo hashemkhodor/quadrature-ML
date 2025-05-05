@@ -83,7 +83,7 @@ def start_training(cfg: QODEConfig):
         "gauss_legendre_2": GaussLegendre2Stage
     }
     # integrator = RKDP()
-    integrator = CashKarp45()
+    integrator = factory_integrator[cfg.integrator]()
     scaler = load(cfg.scaler_path)
     predictor = PredictorQODE(
         step_sizes=cfg.step_sizes,
